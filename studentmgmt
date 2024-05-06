@@ -1,0 +1,545 @@
+#####app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ShowuserComponent } from './showuser/showuser.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HomeComponent } from './home/home.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    RegisterComponent,
+    LoginComponent,
+    ShowuserComponent,
+    NavbarComponent,
+    HomeComponent
+    
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+
+
+#####app routing module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ShowuserComponent } from './showuser/showuser.component';
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  {
+    path:"register",
+    component:RegisterComponent
+  },
+  {
+    path:"login",
+    component:LoginComponent
+  },
+  {
+    path:"showuser",
+    component:ShowuserComponent
+  },
+  {
+    path:"",
+    component:HomeComponent
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+
+
+
+#####home component.html
+
+<!-- <p>home works!</p> -->
+
+
+<div class="container">
+    <div class="oper">
+        <button mat-raised-button color="primary" (click)="regBtn()">Register</button>
+        <button mat-raised-button color="primary" (click)="logBtn()">Login</button>
+        <button mat-raised-button color="primary" (click)="showBtn()">Show User</button>
+    
+    
+    </div>
+</div>
+
+
+
+####home component.css
+
+.container{
+    text-align: center;
+    margin-top: 20 px;
+}
+
+.container .oper button{
+    margin: 10px;
+}
+
+
+######home component.ts
+
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent {
+  constructor(private router:Router){
+
+  }
+
+  regBtn(){
+  this.router.navigate (['/register']);
+  }
+  logBtn(){
+    this.router.navigate (['/login']);
+  }
+  showBtn(){
+    this.router.navigate (['/showuser']);
+  }
+}
+
+
+
+####login css
+
+.container{
+    text-align: center;
+    width: 100%;
+}
+.container .card{
+    background-color:antiquewhite;
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
+}
+.send button{
+margin: 10px;
+}
+
+
+
+####login html
+
+
+<!-- <p>register works!</p> -->
+
+
+
+<div class="container">
+    <div class="card">
+        <h1>Login Form</h1>
+        <form #myLogin="ngForm" (ngSubmit)="doLogin(myLogin.value)">
+           
+
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Email</mat-label>
+                    <input type="email" name="email" [(ngModel)]="data.email" matInput placeholder="Enter Email">
+                </mat-form-field>
+            </p>
+
+           
+
+           
+
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Password</mat-label>
+                    <input type="password" name="password"  [(ngModel)]="data.password"matInput placeholder="Enter Password">
+                </mat-form-field>
+            </p>
+
+            <div class="send">
+                <button type="submit" mat-raised-button color="primary">Login</button>
+                <button type="reset" mat-raised-button color="accent">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+####.ts
+
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+  constructor(private router:Router){
+
+  }
+  user_records:any[]=[];
+  data={
+    email:"",
+    password:""
+  }
+  doLogin(values:any){
+    this.user_records=JSON.parse(localStorage.getItem("users")||'{}');
+    if(this.user_records.some((v)=>{
+      return v.email==this.data.email && v.password==this.data.password
+    })){
+      alert("Login successful");
+      this.router.navigate(['/showuser']);
+    }
+    else{
+      alert("Login Failed");
+    }
+  }
+  
+}
+
+
+
+####navbar html
+<!-- <p>navbar works!</p> -->
+
+<div class="container">
+    <mat-toolbar color="primary">
+        <span>Student Management System</span>
+        <button mat-raised-button (click)="homeBtn()">Back</button>
+
+    </mat-toolbar>
+</div>
+
+
+
+####.ts
+
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
+})
+export class NavbarComponent {
+  constructor(private router:Router){
+
+  }
+  homeBtn(){
+    this.router.navigate(['/'])
+  }
+}
+
+
+
+
+###register.css
+
+.container{
+    text-align: center;
+    width: 100%;
+}
+.container .card{
+    background-color:antiquewhite;
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
+}
+.send button{
+margin: 10px;
+}
+
+
+
+###register.html
+
+<!-- <p>register works!</p> -->
+
+
+
+<div class="container">
+    <div class="card">
+        <h1>Registration Form</h1>
+        <form #myForm="ngForm" (ngSubmit)="doRegistration(myForm.value)">
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Name</mat-label>
+                    <input type="text" name="name" [(ngModel)]="data.name" matInput placeholder="Enter Name">
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Email</mat-label>
+                    <input type="email" name="email" [(ngModel)]="data.email" matInput placeholder="Enter Email">
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Mobile</mat-label>
+                    <input type="text" name="mobile" [(ngModel)]="data.mobile" matInput placeholder="Enter Mobile">
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Address</mat-label>
+                    <input type="text" name="address" [(ngModel)]="data.address" matInput placeholder="Enter Address">
+                </mat-form-field>
+            </p>
+
+            <p>
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Password</mat-label>
+                    <input type="password" name="password"  [(ngModel)]="data.password"matInput placeholder="Enter Password">
+                </mat-form-field>
+            </p>
+
+            <div class="send">
+                <button type="submit" mat-raised-button color="primary">Register</button>
+                <button type="reset" mat-raised-button color="accent">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+####register.ts
+
+import { Component } from '@angular/core';
+import { getMatFormFieldDuplicatedHintError } from '@angular/material/form-field';
+import { FormControl,FormGroup } from '@angular/forms';
+
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
+})
+export class RegisterComponent {
+  constructor(){
+
+  }
+  ngOnInit():void{
+
+  }
+  user_records:any[]=[];
+  data={
+    name:"",
+    email:"",
+    mobile:"",
+    address:"",
+    password:""
+  }
+  doRegistration(values:any){
+    this.user_records=JSON.parse(localStorage.getItem('users')||'{}');
+    if(this.user_records.some((v)=>{
+      return v.email==this.data.email
+    })){
+      alert("Duplicate Data");
+    }
+    else{
+      this.user_records.push(this.data)
+      localStorage.setItem("users" , JSON.stringify(this.user_records));
+      alert("Hi "+this.data.name+ " you are successfully registered")
+    }
+  }
+
+
+
+}
+
+
+
+####show user.css
+
+.container .card{
+    text-align: center;
+    margin: auto;
+}
+.container .card table{
+    width: 50%;
+    background-color: antiquewhite;
+    text-align: center;
+    margin: auto;
+}
+h1{
+    margin-top: 10px;
+}
+
+
+
+###.html
+
+<div class="container">
+    <div class="card">
+        <h1>Registered Students</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let datas of user_records;">
+                    <td>{{datas.name}}</td>
+                    <td>{{datas.email}}</td>
+                    <td>{{datas.mobile}}</td>
+                    <td>{{datas.address}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+###.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-showuser',
+  templateUrl: './showuser.component.html',
+  styleUrls: ['./showuser.component.css']
+})
+export class ShowuserComponent {
+user_records:any[]=[];
+data={
+  name:"",
+  email:"",
+  mobile:"",
+  address:"",
+  password:""
+}
+constructor(){
+  this.user_records=JSON.parse(localStorage.getItem('users')||'{}')
+}
+}
+
+
+
+####app routing module ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ShowuserComponent } from './showuser/showuser.component';
+import { HomeComponent } from './home/home.component';
+
+const routes: Routes = [
+  {
+    path:"register",
+    component:RegisterComponent
+  },
+  {
+    path:"login",
+    component:LoginComponent
+  },
+  {
+    path:"showuser",
+    component:ShowuserComponent
+  },
+  {
+    path:"",
+    component:HomeComponent
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+
+###app component.html
+<app-navbar></app-navbar>
+<!-- <h2>WELCOME!!</h2> -->
+
+<router-outlet></router-outlet>
+
+
+
+###appmodule.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ShowuserComponent } from './showuser/showuser.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HomeComponent } from './home/home.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    RegisterComponent,
+    LoginComponent,
+    ShowuserComponent,
+    NavbarComponent,
+    HomeComponent
+    
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
